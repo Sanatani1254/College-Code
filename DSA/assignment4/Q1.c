@@ -9,7 +9,7 @@ struct Node
 
 int main()
 {
-    struct Node *start,*temp,*ptr;
+    struct Node *start = NULL,*temp = NULL,*ptr = NULL;
 
     start = (struct Node*) malloc(sizeof(struct Node));
     start-> val = 0;
