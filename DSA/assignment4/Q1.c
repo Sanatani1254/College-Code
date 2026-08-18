@@ -7,6 +7,14 @@ struct Node
     struct Node *next;
 };
 
+void  printlist(struct Node *ptr)
+{
+    while(ptr!=NULL)
+    {
+        printf("%d ,",ptr->val);
+        ptr = ptr->next;
+    }
+}
 int main()
 {
     struct Node *start = NULL,*temp = NULL,*ptr = NULL;
@@ -24,13 +32,8 @@ int main()
         ptr->next = temp;
         ptr = ptr->next;
     }
-    ptr = start;
-    while(ptr!=NULL)//print
-    {
-        printf("%d ,",ptr->val);
-        ptr = ptr->next;
-    }
-    printf("\n");
+     printlist(start);
+    printf("\ninsertion\n");
 
     ptr = start;
     //insertion at head
@@ -39,7 +42,7 @@ int main()
     temp ->next = start;
     start = temp;
 
-    //insertion in middle
+    //insertion in between
     for(int i = 1;i<3;i++)
     {
         ptr = ptr->next;
@@ -61,11 +64,36 @@ int main()
     temp ->val = -1;
     temp->next = NULL;
     ptr->next = temp;
+    
+     printlist(start);
+    printf("\n");
+    //deletion
+    printf("deletion\n");
+    //head deletion
     ptr = start;
-    while(ptr!=NULL)//print
+    start = start->next;
+    free(ptr);
+    //deletion in between
+
+    ptr = start;
+    for(int i = 1;i<3;i++)
     {
-        printf("%d ,",ptr->val);
         ptr = ptr->next;
     }
-    printf("\n");
+    temp = ptr->next;
+    ptr->next = temp->next;
+    free(temp);
+
+    //deletion at end
+    ptr = start;
+    while(ptr->next->next!=NULL)
+    {
+        ptr = ptr->next;
+    }
+    temp = ptr->next;
+    ptr->next = NULL;
+    free(temp);
+
+     printlist(start);
+
 }
