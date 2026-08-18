@@ -95,5 +95,6 @@ int main()
     free(temp);
 
      printlist(start);
+    printf("\n");
 
 }
