@@ -23,9 +23,9 @@ class complex
     {
         if(im<0)
         {
-            std::cout<<real<<"-"<<im<<std::endl;
+            std::cout<<real<<"- i"<<im<<std::endl;
         }else{
-            std::cout<<real<<"+"<<im<<std::endl;
+            std::cout<<real<<"+ i"<<im<<std::endl;
         }
 
     }
