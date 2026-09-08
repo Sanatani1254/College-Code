@@ -6,7 +6,8 @@ private:
     int top;
 
 public:
-    Stack() {
+    Stack() 
+    {
         top = -1;
     }
     void push(int value) {
@@ -44,7 +45,7 @@ public:
 
 int main() {
     Stack s;
-    for(int i = 0;i<5;i++)
+    for(int i = 0;i<25;i++)
     {
         s.push((i+1)*10);
     }
