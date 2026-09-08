@@ -101,6 +101,7 @@ void delete(struct Node **start, int *n, int k)
 
 }
 
+
 int main()
 {
     struct Node *start,*ptr,*temp,*ptr1;
