@@ -45,7 +45,7 @@ public:
 
 int main() {
     Stack s;
-    for(int i = 0;i<25;i++)
+    for(int i = 0;i<5;i++)
     {
         s.push((i+1)*10);
     }
