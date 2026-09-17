@@ -7,7 +7,7 @@ private:
     float imag;
 
 public:
-    Complex(float r = 0, float i = 0) : real(r), imag(i) {}
+    Complex(int r,int i) :real(r),imag(i){};
 
     Complex& operator++() 
     {
