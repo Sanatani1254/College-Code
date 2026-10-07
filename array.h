@@ -53,12 +53,11 @@ class array
 
       int arrindex = s;
 
-      for(int i = 0;i<len1;i++)
+      for(int i = 0;i<len1;i++)//populate
       {
         first[i] = arr[arrindex++];
       }
 
-      int k = mid+1;
       for(int i = 0;i<len2;i++)
       {
         second[i] = arr[arrindex++];
