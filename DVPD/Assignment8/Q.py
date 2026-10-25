@@ -29,7 +29,7 @@ y = df['target_species']
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
-X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, random_state=56)
 
 kmeans = KMeans(n_clusters=3, random_state=42, n_init=10)
 df['kmeans_cluster'] = kmeans.fit_predict(X_scaled)
