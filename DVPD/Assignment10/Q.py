@@ -1,25 +1,47 @@
-"""Superstore sales dashboard (Streamlit). Follows the 7-step procedure."""
-
+import os
 import pandas as pd
 import plotly.express as px
 import streamlit as st
 
 st.set_page_config(page_title="Superstore Sales Dashboard", layout="wide")
 
-# ============ STEP 1 + 2: Select the dataset and import it ============
-# Dataset: "Sample - Superstore.csv" (Region, Category, Date, Sales, Profit...)
-st.sidebar.header("Step 2: Load data")
-file = st.sidebar.file_uploader("Upload Superstore CSV", type="csv")
-if file is None:
+# ============ STEP 1 + 2: Select the dataset and import it (from the internet) ============
+URL = "https://raw.githubusercontent.com/edusatyaki/Dataset/main/Sample%20-%20Superstore.csv"
+LOCAL = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Sample - Superstore.csv")
+
+
+@st.cache_data(show_spinner="Loading dataset")
+def load_data(source):
+    """Read a CSV from a URL, file path, or upload, and make Order Date a real date."""
+    data = pd.read_csv(source, encoding="latin-1")
+    data["Order Date"] = pd.to_datetime(data["Order Date"])
+    return data
+
+
+df = None
+try:
+    df = load_data(URL)                          # 1st choice: internet
+except Exception:
+    if os.path.exists(LOCAL):                    # 2nd choice: file in the same folder
+        df = load_data(LOCAL)
+    else:                                        # 3rd choice: upload by hand
+        st.sidebar.warning("Could not load from the internet.")
+        upload = st.sidebar.file_uploader("Upload the Superstore CSV", type="csv")
+        if upload is not None:
+            df = load_data(upload)
+if df is None:
     st.title("Superstore Sales Dashboard")
-    st.info("Upload the Superstore CSV in the sidebar to begin.")
+    st.info("Check your internet connection, or upload the Superstore CSV in the sidebar.")
     st.stop()
 
-df = pd.read_csv(file, encoding="latin-1", parse_dates=["Order Date"])
-
+needed = ["Order ID", "Order Date", "Region", "Category", "Sub-Category", "Sales", "Profit"]
+missing = [c for c in needed if c not in df.columns]
+if missing:
+    st.error(f"The CSV is missing these columns: {', '.join(missing)}")
+    st.stop()
 
 # ============ STEP 5: Interactive filters (sidebar) ============
-st.sidebar.header("Step 5: Filters")
+st.sidebar.header("Filters")
 regions = st.sidebar.multiselect("Region", sorted(df["Region"].unique()),
                                  default=sorted(df["Region"].unique()))
 cats = st.sidebar.multiselect("Category", sorted(df["Category"].unique()),
@@ -30,7 +52,7 @@ if len(dates) != 2:
     st.info("Pick both a start and an end date.")
     st.stop()
 
-# Every visual below uses 'f', so they all update together.
+# 'f' is the filtered table. Every KPI, chart and insight uses it.
 f = df[df["Region"].isin(regions) & df["Category"].isin(cats)
        & df["Order Date"].between(pd.Timestamp(dates[0]), pd.Timestamp(dates[1]))]
 if f.empty:
@@ -57,7 +79,6 @@ c4.metric("Average Order Value", f"${aov:,.0f}")
 left, right = st.columns(2)
 
 with left:
-    # Time-series line chart: sales trend over months
     st.subheader("Sales trend over months")
     monthly = (f.groupby(f["Order Date"].dt.to_period("M").dt.to_timestamp())["Sales"]
                .sum().reset_index())
@@ -65,14 +86,12 @@ with left:
                     use_container_width=True)
 
 with right:
-    # Bar chart: sales by region or category
     st.subheader("Sales by region / category")
     by = st.radio("Group by", ["Region", "Category"], horizontal=True)
     bar = f.groupby(by)["Sales"].sum().reset_index().sort_values("Sales")
     st.plotly_chart(px.bar(bar, x="Sales", y=by, orientation="h"),
                     use_container_width=True)
 
-# Tree map: big box = more sales, green = profit, red = loss
 st.subheader("Tree map: sales by sub-category (colour = profit margin)")
 t = f.groupby(["Category", "Sub-Category"])[["Sales", "Profit"]].sum().reset_index()
 t["Margin"] = t["Profit"] / t["Sales"]
@@ -82,7 +101,7 @@ st.plotly_chart(px.treemap(t, path=["Category", "Sub-Category"], values="Sales",
                 use_container_width=True)
 
 # ============ STEP 7: Key insights + export ============
-st.subheader("Step 7: Key insights")
+st.subheader("Key insights")
 best_region = f.groupby("Region")["Profit"].sum().idxmax()
 top_sub = f.groupby("Sub-Category")["Sales"].sum().idxmax()
 sub_profit = f.groupby("Sub-Category")["Profit"].sum()
