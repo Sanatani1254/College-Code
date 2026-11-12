@@ -1,0 +1,109 @@
+Data structure:
+    stack s: s.val (pointer to array),s.top,s.max
+
+start(s)
+    s.val <- allocate(1024)
+    s.max <- 1024
+    s.top <- -1
+
+isempty(s)
+    if s.top = -1
+        return 1
+    else
+        return 0
+
+finish(s)
+    free(s.val)
+
+isfull(s)
+    if s.top+1 = s.max
+        return 1
+    else return 0
+
+
+
+resize(s,newmax)
+    a <- allocate(newmax)
+    if a = NIL
+        return false
+    for i = 0 to s.top
+        a[i] <- s.val[i]
+    free(s.val)
+    s.max <- newmax
+    s.val <- a
+    return true
+
+pop(s,v)
+    if isempty(s)
+        return false
+    v <- s.val[s.top]
+    s.top <- s.top-1
+    if s.max > 1024 and s.top+1 <= s.max / 4
+        resize(s,s.max / 2)
+    return true
+
+push(s,v)
+    if isfull(s)
+        if resize(s,s.max*2) = false
+            return false
+    s.top <- s.top + 1
+    s.val[s.top] <- v
+    return true
+
+calculate(eq,result)
+    start(s)
+    n <- length[eq]
+    i <- 0
+    while i < n
+        c <- eq[i]
+        if c = ' '
+            i <- i + 1
+            continue
+        if (c >= '0' and c <= '9') or (c = '-' and i + 1 < n and eq[i+1] >= '0' and eq[i+1] <= '9')
+            negative <- false
+            if c = '-'
+                negative <- true
+                i <- i + 1
+            val <- 0
+            while i < n and eq[i] >= '0' and eq[i] <= '9'
+                val <- val * 10 + (eq[i] - '0')
+                i <- i + 1
+            if negative
+                val <- val * -1
+            if push(s,val) = false
+                print "out of memory"
+                finish(s)
+                return false
+        elseif c = '+' or c = '*' or c = '-' or c = '/'
+            if pop(s,b) = false or pop(s,a) = false
+                print "underflow:Not enough oparands"
+                finish(s)
+                return false
+            if c = '+'
+                r <- a + b
+            elseif c = '*'
+                r <- a * b
+            elseif c = '-'
+                r <- a - b
+            else
+                if b = 0
+                    print "Error: division by zero"
+                    finish(s)
+                    return false
+                r <- a / b
+            push(s,r)
+            i <- i + 1
+        else
+            print "invalid characters"
+            finish(s)
+            return false
+    if pop(s,result) = false
+        print "empty equation"
+        finish(s)
+        return false
+    if isempty(s) = false
+        print "Error: Wrong equation"
+        finish(s)
+        return false
+    finish(s)
+    return true

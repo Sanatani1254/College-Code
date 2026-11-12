@@ -1,0 +1,162 @@
+a) Merging two booking schedules in O(n)
+
+(i) Algorithm
+
+Each booking (k,s,t) will become these pair of events (s,+k) and (t, −k). Since the set of bookings in any schedule is disjoint and the bookings are sorted according to the starting time, its set of events will already be sorted in time order.
+
+Merge(B1,B2):
+    E1 <- events(B1)           
+    E2 <- events(B2)          
+    i<-1 
+    j<-1
+    cur <- 0                    
+    prevT <- NIL
+    out <- empty list
+
+    while i <= |E1| or j <= |E2|  //|E| = Number of elements in E
+        T <- min(time of E1[i],time of E2[j])   
+
+        if prevT != NIL and cur > 0
+            if !isempty(out) and out.last.t = prevT and out.last.k = cur
+                out.last.t <- T                    
+            else
+                append(cur,prevT,T) in out
+
+        while i <= |E1| and E1[i].time = T  
+            cur <- cur + E1[i].delta; i <- i+1
+        while j <= |E2| and E2[j].time = T 
+            cur <- cur + E2[j].delta; j <- j+1
+
+        prevT <- T
+
+    return out
+
+Remove All
+
+(ii) Why overlap, adjacency and room counts work correctly Overlap: The change in the number of active talks can only occur at a breakpoint. So, for the two consecutive breakpoints B1 and B2, the number of halls needed is the sum of the halls needed for each active talk in B1 and B2. This value is cur, which is the sum of the delta values for all breakpoints. If there are overlapping bookings at B1 and B2, they will always be counted towards the final number of halls needed. Gaps: When cur is 0, there are no bookings created for that interval, meaning that intervals like (13,14) and (1,12) are separate intervals. Adjacency: The constraint Out.last.t = prevT ensures that bookings that are adjacent in k cannot be created. So, if there is a breakpoint at T = 2 but the bookings do not change at this time, no bookings will be created for T = 2. For example, the bookings (1,0,1) and (1,1,2) will become (1,0,2) at T = 2. Simultaneous events: Bookings at time T are created after all the bookings that happen at time T are created. Ordering and disjointness: Intervals are sorted from left to right across the elementary intervals and are disjoint. Uniqueness: Since the demand function for the talks is defined, the schedule is also defined. With maximal merging, the schedule will be the canonical schedule representation.
+
+(iii) Why the complexity is O(n) The system generates 2n total events because it sums up to two times the size of B1 plus two times the size of B2. Each loop iteration processes either one or both of the indices i and j. The system will process every event for the first time when it consumes all events in the sequence. The loop executes three basic operations during each iteration which include addition and minimum value calculation and it performs either an extension operation or an append operation. The final schedule will consist of at most 2n - 1 elementary intervals. The total time requirement will follow an O(n) pattern. (b) An O(n log n) schedule algorithm for R = n requests. The request scheduling algorithm needs you to develop a divide and conquer approach for its operation. The program needs to produce a single schedule (1, s, t) when it receives a request (s, t) and finds that the request set contains only one element. The schedule R needs to be divided into two separate parts which consist of R_L with ⌊n/2⌋ elements and R_R which holds ⌈n/2⌉ elements. The calculation requires you to find both B_L and B_R values. Merge Schedules. Return the Merged Schedules of both B_L and B_R. The B_L and B_R schedules represent the only valid schedules which correspond to their respective request sets R_L and R_R according to the principle of induction.
+
+b) 
+O(n log n) algorithm for a set R of n requests
+
+Using divide and conquer.
+
+If |R| = 1, with request (s,t),return the schedule (1,s,t).
+Otherwise split R into halves R_L and R_R of sizes ⌊n/2⌋ and ⌈n/2⌉.
+and compute B_L and B_R.
+Return Mergeschedules(B_L, B_R).
+
+Correctness: By induction, B_L and B_R are the unique valid schedules for R_L and R_R. The merge in (a) produces the unique valid schedule for R_L ∪ R_R = R.
+
+Time: Each schedule has at most 2n − 1 bookings, so the merge costs O(n) and T(n) = 2T(n/2) + O(n). By the Master theorem (or by n/2^i levels each costing O(n)), this gives T(n) = O(n log n).
+
+c)
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+struct Booking 
+{ 
+    int k,s,t;
+};
+
+static vector<pair<int,int> > events(const vector<Booking> &s) 
+{
+    vector<pair<int,int>> e;
+    for (int x = 0;x<s.size();x++) 
+    {
+        e.push_back(make_pair(s[x].s, s[x].k));     
+        e.push_back(make_pair(s[x].t, -s[x].k));   
+    }
+    return e;                                       
+}
+
+static vector<Booking> merge(const vector<Booking>& A,const vector<Booking>& B) {
+    vector<pair<int,int>> a = events(A);
+    vector<pair<int,int>> b = events(B);
+    int n1 = a.size(),n2 = b.size();
+    int cur = 0;
+    int i = 0,j = 0;
+    bool hasPrev = false;
+    int prevT = -1;
+    vector<Booking> out;
+
+    while (i<n1 || j<n2) 
+    {
+        int t;                                 
+        if (i<n1 && (j>=n2 || a[i].first<=b[j].first))
+            t = a[i].first;
+        else
+            t = b[j].first;
+
+        if (hasPrev && cur > 0) 
+        {
+            if (!out.empty() && out.back().t == prevT && out.back().k == cur) 
+            {
+                out.back().t = t;
+            } 
+            else 
+            {
+                Booking nb;
+                nb.k = (int)cur;
+                nb.s = prevT;
+                nb.t = t;
+                out.push_back(nb);
+            }
+        }
+        while (i<n1 && a[i].first == t) 
+        {
+             cur += a[i].second; 
+             i++; 
+        }
+        while (j<n2 && b[j].first == t) 
+        { 
+            cur += b[j].second; 
+            j++; 
+        }
+
+        prevT = t;
+        hasPrev = true;
+    }
+    return out;
+}
+
+static vector<Booking> solve(vector<pair<int,int> > &R,int lo,int hi) {
+    if (hi-lo == 1) 
+    {
+        vector<Booking> single;
+        Booking b;
+        b.k = 1;
+        b.s = R[lo].first;
+        b.t = R[lo].second;
+        single.push_back(b);
+        return single;
+    }
+    int mid = (lo + hi)/2;
+    return merge(solve(R,lo,mid),solve(R,mid,hi));
+}
+
+vector<Booking> booking(vector<pair<int,int> >& R) {
+    if (R.empty()) return vector<Booking>();
+    return solve(R, 0, (int)R.size());
+}
+
+int main() {
+    vector<pair<int,int> > R;
+    R.push_back(make_pair(1,3));
+    R.push_back(make_pair(15,100));
+    R.push_back(make_pair(17,50));
+    R.push_back(make_pair(6,19));
+    R.push_back(make_pair(24,64));
+    R.push_back(make_pair(15,22));
+    R.push_back(make_pair(13,74));
+
+    vector<Booking> result = booking(R);
+    for (int x = 0;x<result.size();x++)
+    {
+        cout<<"("<<result[x].k<<","<<result[x].s<<","<<result[x].t<<")"<<endl;
+    }
+    return 0;
+}

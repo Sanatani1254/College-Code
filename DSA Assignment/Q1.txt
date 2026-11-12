@@ -1,0 +1,125 @@
+Data structures:
+
+Node: msg,next,prev,ptrp
+user: id,chathead,ban
+chat: v[1...n],n,head,tail
+
+Procedures:
+
+Build(ids,n)
+    c <- new chat
+    c.v <- new array user[1...n]
+    c.head <- NIL
+    c.tail <- NIL
+    c.n <- n
+
+    for (i = 1 to n )
+        c.v[i].id <- ids[i]
+        c.v[i].chathead <- NIL
+        c.v[i].ban <- False
+    sort(c.v,key <- id)
+    return c
+
+Send(c,id,m)
+    u <- Find(c,id)
+    if( u = NIL or u.ban)
+        return False
+    x <- new Node
+
+    x.next <- NIL
+    x.prev <- c.tail
+    x.msg <- Copy(m)
+    if( c.tail != NIL)
+        c.tail.next <- x
+    else 
+        c.head <- x
+    c.tail <- x
+    x.ptrp <- u.chathead
+    u.chathead <- x
+    
+    return True
+
+Ban(c,id)
+   u <- Find(c,id)
+   if (u = NIL or u.ban)
+       return
+   u.ban <- True
+   x <- u.chathead
+   while x != NIL
+       if (x.prev != NIL)
+           x.prev.next <- x.next
+      else  
+            c.head <- x.next
+
+      if (x.next != NIL)
+            x.next.prev <- x.prev
+      else 
+            c.tail <- x.prev
+      temp <- x.ptrp
+      FREE(x.msg)
+      FREE(x)
+      x <- temp
+      u.chathead <- NIL
+
+Find(c,id)
+    left <- 1
+    right <- c.n
+    while left<=right
+        mid <- (left+right)/2
+
+        if (c.v[mid].id = id)
+            return c.v[mid]
+        elseif c.v[mid].id<id
+            left <- mid+1
+        else right <- mid-1
+
+    return NIL
+
+Recent(c,k)
+    cur <- c.tail
+    count <- 0
+
+    while cur != NIL and count <k
+        print cur.msg
+        cur <- cur.prev
+        count <- count+1
+
+
+
+Destroy(c)
+    x <- c.head
+    while x != NIL
+        temp <- x.next
+        FREE(x.msg)
+        FREE(x)
+        x <- temp
+
+    FREE(c.v)
+    FREE(c)
+
+Main()
+    ids <- [5,3,9,1]
+    room <- Build(ids,4)
+
+    Send(room,3,"Hello")
+    Send(room,5,"My name is Suryansh")
+    Send(room,3,"I am doing btech at NIT Jalandhar")
+    Send(room,9,"how do you do?")
+
+    print "Recent 10 messages:"
+    Recent(room,10)
+    print "BANNING User 3"
+    x <- 3
+    Ban(room,x)
+    print "after ban(3):"
+
+    Recent(room,10)
+    if not Send(room,x,"x")
+        print "user x is banned,cannot chat"
+    print "recent(2):"
+    Recent(room,2)
+    Destroy(room)
+
+
+
+

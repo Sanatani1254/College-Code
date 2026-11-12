@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+    int val;
+    struct node *next;
+};
+
+struct node *search(struct node *l,int x)
+{
+    struct node *p = l;
+    while (p != NULL)
+    {
+        if (p->val == x)
+            return p;
+        p = p->next;
+    }
+    return NULL;
+}
+
+
+struct node *srchinst(struct node **l,int x)
+{
+    struct node *p = search(*l, x);
+    if (p != NULL)
+        return p;
+
+    p = (struct node *)malloc(sizeof(struct node));
+
+    p->val = x;
+    p->next = *l;
+    *l = p;
+    return p;
+}
+
+int main()
+{
+    struct node *list = NULL;
+    srchinst(&list, 1);
+    srchinst(&list, 2);
+    srchinst(&list, 3);          
+
+    struct node *p;
+    for(int i = 1;i<6;i++)
+    {
+        p = search(list,i);
+        if(p == NULL ) printf("NOT FOUND\n");
+        else printf("FOUND %d\n",i);
+    }
+
+    for (p = list; p != NULL; p = p->next)
+        printf("%d ", p->val);
+    printf("\n");                
+
+    while (list != NULL)         
+    {
+        p = list->next;
+        free(list);
+        list = p;
+    }
+    return 0;
+}

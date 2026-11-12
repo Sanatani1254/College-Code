@@ -1,0 +1,239 @@
+# Product Exploratory Data Analysis (EDA) Dashboard### Sales and Profit Analysis with Sample Superstore Dataset CSDC0207 - Data Visualization for Product Design Diwali Vacation Assignment (Part E): E1- Product EDA Dashboard Submitted By: [Your Name] Roll Number: [Your Roll Number] Branch: B.Tech Computer Science And Engineering Institute: Dr. B. R. Ambedkar National Institute Of Technology Jalandhar
+
+Data Visualization plays an important role in the present world. It helps us understand how our businesses are performing, and enables us to make data driven decisions. Within large sets of data we can understand how much money our company is making, how many orders are being placed and how well certain product categories are selling. It can be difficult to find meaningful patterns from this data however.
+
+This project aims to create an interactive dashboard which shows various pieces of information based on product sales, categories, regions, discounts and profits using the Sample Superstore dataset. The dashboard will be created using Python and Streamlit. Visualisations will be created using Plotly.
+
+2. Problem Statement Retail businesses collect large amounts of data from their transactions. However without analysing this data it can be difficult to answer the following questions:
+
+What product categories have the most sales?
+
+What product subcategories have the lowest profits?
+
+How do sales vary over time?
+
+What regions have the most sales?
+
+Is there any correlation between discounts and profits?
+
+The aim of this project is to create an interactive dashboard to show this information using the data from the Sample Superstore dataset.
+
+The aim of this project is to answer these questions by creating an interactive dashboard to show the business data clearly.
+
+3. Objectives
+
+Explore and analyse retail sales data.
+
+Clean and prepare the data.
+
+Create an interactive dashboard with filters and KPI’s.
+
+Understand sales and profit trends over time.
+
+Analyse how discounts affect profits.
+
+Compare sales between regions and categories.
+
+Show meaningful insights using visuals.
+
+4. Data Description
+
+This project involves using the Sample Superstore dataset, which contains retail transaction data including customer order, product, sales and profit data.
+
+Important variables found within the dataset include:
+
+Order ID
+
+Order Date
+
+Region
+
+Category
+
+Sub-Category
+
+Sales
+
+Profit
+
+Quantity
+
+Discount
+
+Dataset Source: https://github.com/edusatyaki/Dataset/blob/main/Sample%20-%20Superstore.CSV
+
+The dataset is imported directly from a public CSV file. However there is also the ability to upload a CSV file.
+
+5. Technologies Used
+
+Technology Purpose
+
+Python Primary coding language.
+
+Pandas Import, clean and manipulate data.
+
+NumPy Perform numerical operations.
+
+Plotly Express Create interactive visuals.
+
+Streamlit Create interactive dashboard.
+
+6. Data Cleaning
+
+Some data preparation was performed to ensure better quality data.
+
+Remove duplicates
+
+Any exact duplicate rows were removed.
+
+Convert dates
+
+The Order Date was converted to proper date time format. Any invalid dates were removed.
+
+Convert numbers
+
+Sales, Profit, Quantity and Discount were converted to numbers.
+
+Handle missing data
+
+Rows where Order Date, sales or profit were missing or invalid were removed.
+
+Where region, category or sub-category were missing they were assigned the value "Unknown".
+
+Where quantity or discount were missing they were filled in with the median of the column.
+
+Validation
+
+The dashboard ensures that the necessary columns are present before analysing. It also handles cases where there is no data, or invalid filter options.
+
+This ensures that the data is consistent and the visuals are reliable.
+
+7. Dashboard and Visualisations
+
+The dashboard contains some interactive filters, KPI’s and 6 visualisations.
+
+7.1 KPI’s
+
+This dashboard contains 4 important KPI’s:
+
+Profit Margin – Shows the ratio of total profits to total sales.
+
+Total Sales – Shows the total revenue generated from selected data.
+
+Total Profit – Shows the total profit generated from selected data.
+
+Total Orders – Shows the number of unique orders.
+
+This gives a quick overview of how the business is doing.
+
+7.2 Sales Over Time
+
+This line chart shows how sales have changed over time.
+
+This visualisation helps identify any trends in sales, if sales are increasing or decreasing and when sales are at their highest.
+
+[Insert what month had the most sales and if sales generally increased/decreased or fluctuated].
+
+7.3 Profit by Sub-Category
+
+This horizontal bar chart shows the total profit made from each product sub-category.
+
+This helps identify which product sub-categories are making the most/least profit.
+
+[Insert which sub-category made the most profit and which made the least].
+
+7.4 Discount vs Profit
+
+This scatter plot shows how discount percentages relate to profits.
+
+This helps see if higher discounts result in lower/higher profits.
+
+[Insert what relationship can be seen from this scatter plot. Do not state there is a causal relationship].
+
+7.5 Sales by Category
+
+This bar chart shows the total sales by category.
+
+This helps identify which product categories are contributing to the most sales.
+
+[Insert which category had the most sales].
+
+7.6 Sales by Region
+
+This bar chart shows the total sales by region.
+
+This helps understand how well different regions are selling. It can help identify which regions are performing well.
+
+[Insert which region had the most sales].
+
+7.7 Profit by Category
+
+This box plot shows the distribution of profits by category.
+
+This helps to compare the medians, range and any outliers between categories. It can help identify which category has the highest median profit or the largest range of profit.
+
+8. Interactive Features
+
+This dashboard contains the following interactive features:
+
+Region filter – Select one or more regions.
+
+Category filter – Analyse selected product categories.
+
+Date range filter – Analyse data within a specific time frame.
+
+Upload CSV – Upload your own compatible dataset.
+
+Dynamic KPI’s and charts – All KPI’s and charts update depending on the filters selected.
+
+Download CSV – Download the filtered data.
+
+Data cleaned summary – Shows information about how duplicates and missing data was handled.
+
+9. Key Findings
+
+From the selected dataset and the dashboard you can gain the following findings:
+
+[Category Name] had the most sales.
+
+[Region Name] had the most sales.
+
+[Sub-Category Name] had the least total profits.
+
+[Month Year] had the most sales.
+
+There appears to be a [Positive/Negative/Weak/No clear] relationship between discount and profits.
+
+The distribution of profits shows [Insert brief comment on what can be seen from the box plot].
+
+This can help identify which product categories are performing well, what regions could be targeted and what areas could be looked into further.
+
+10. Conclusion
+
+The Product EDA Dashboard showcases how data visualisations can be used to analyse how a retail business is performing.
+
+Using Python, Pandas, Plotly and Streamlit, this project converts raw transaction data into an interactive dashboard. This contains KPI’s and a variety of visualisations.
+
+The dashboard allows users to analyse sales trends, compare categories, analyse performance in regions and see patterns in profits. The filters make the analysis more flexible. The data has also been prepared to improve the quality of results.
+
+Overall this project showcases how exploratory data analysis and interactive visualisations can be applied to understand business data.
+
+11. References
+
+Sample Superstore Dataset, GitHub. [Online] Available at: https://github.com/edusatyaki/Dataset
+
+Pandas Documentation. [Online] Available at: https://pandas.pydata.org/docs/
+
+Streamlit Documentation. [Online] Available at: https://docs.streamlit.io/
+
+Plotly Python Documentation. [Online] Available at: https://plotly.com/python/
+
+12. Project Files
+
+The source code for this project can be found below:
+
+DVPDAssignment.py
+
+To run the dashboard type:
+
+python -m streamlit run DVPDAssignment.py
