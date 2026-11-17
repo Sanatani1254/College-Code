@@ -1,0 +1,142 @@
+# RESEARCH REPORT
+## Visualizing High-Dimensional Data: PCA vs t-SNE vs UMAP
+
+**Course:** CSDC0207 – Data Visualization for Product Design  
+**Assignment:** Diwali Vacation Assignment – Part F
+
+**Submitted by:** Suryansh Sharma  
+**Roll Number:** 25103164  
+**Department:** Computer Science and Engineering  
+**Institute:** Dr. B. R. Ambedkar National Institute of Technology, Jalandhar  
+**Submitted to:** Dr. Pranjal
+
+---
+
+## Abstract
+
+Working with datasets that have hundreds or even thousands of features can be difficult, particularly when we want to visualize them. Most standard graphs show only two or three dimensions, making high-dimensional data hard to interpret directly. Dimensionality reduction addresses this challenge by mapping data to fewer dimensions while preserving as much of its meaningful information as possible. This report looks at three widely used methods: Principal Component Analysis (PCA), t-Distributed Stochastic Neighbor Embedding (t-SNE), and Uniform Manifold Approximation and Projection (UMAP). It compares how they work, along with their strengths and limitations, to show when each method may be useful.
+
+**Keywords:** Dimensionality Reduction, PCA, t-SNE, UMAP, Data Visualization.
+
+## 1. Introduction
+
+Data is now collected across nearly every field, from healthcare and social media to business and machine learning. These datasets often include many features. An image dataset, for instance, may store thousands of pixel values for each image. While those features can hold valuable information, examining them all at once can be challenging.
+
+Dimensionality reduction offers one way to make such data easier to explore. It reduces the number of variables while aiming to preserve the key patterns in the original dataset.
+
+PCA, t-SNE, and UMAP are three popular techniques for this task. Each can map high-dimensional data into two dimensions, but they do so in different ways and can produce different visualizations. Knowing how they differ can help us select the method that best fits a given problem.
+
+## 2. Principal Component Analysis (PCA)
+
+PCA is a popular technique for reducing the number of dimensions in a dataset. It does this by turning the original features into new variables called *principal components*.
+
+The goal is to preserve as much of the data’s variation as possible. The first principal component captures more variance than any other component, and each one after that captures as much of the remaining variance as it can. The components are uncorrelated with one another.
+
+The basic steps in PCA are:
+
+1. Standardize the data if the features are measured on different scales.
+2. Calculate the covariance matrix.
+3. Find its eigenvalues and eigenvectors.
+4. Rank the principal components by their eigenvalues.
+5. Choose the components to keep and use them to transform the data.
+
+**Advantages:**
+- It’s relatively fast and computationally efficient.
+- It reduces the number of features while preserving much of the important variation.
+- It can remove redundancy among correlated features.
+- Explained variance shows how much information the selected components retain.
+
+**Limitations:**
+- PCA is mainly suited to linear relationships.
+- It may not capture complex nonlinear patterns well.
+- The new components can be hard to interpret because they combine several original features.
+
+PCA is a good option when relationships in the data are mostly linear and you want a simpler representation while retaining as much information as possible.
+
+## 3. t-Distributed Stochastic Neighbor Embedding (t-SNE)
+
+t-SNE is a nonlinear dimensionality reduction method commonly used to visualize complex datasets. While PCA aims to preserve overall variance, t-SNE focuses on keeping similar data points close together in a lower-dimensional representation.
+
+It begins by measuring how similar points are in the original high-dimensional space. Next, it creates a lower-dimensional representation and adjusts it so the similarities in both spaces are as similar as possible. This is achieved by minimizing a measure known as Kullback–Leibler divergence.
+
+**Advantages:**
+- It can bring out groups and patterns that are hard to spot in the original data.
+- It works well for exploring complex datasets.
+- It is useful when local relationships between data points matter.
+
+**Limitations:**
+- Processing large datasets can take longer.
+- Results depend on settings such as perplexity.
+- The distance between separate clusters may not reflect their true distance in the original dataset.
+- Different parameter settings can lead to different visualizations.
+
+t-SNE is often used in fields such as image analysis, biological research and machine learning, where identifying groups of similar observations is helpful.
+
+## 4. Uniform Manifold Approximation and Projection (UMAP)
+
+UMAP is another nonlinear method for reducing the dimensions of complex datasets. It draws on ideas from manifold learning and topology.
+
+Rather than focusing only on overall variance, UMAP builds a graph connecting neighbouring data points. It then creates a lower-dimensional representation designed to preserve important neighbourhood relationships.
+
+**Advantages:**
+- It is often faster than t-SNE, especially with larger datasets.
+- It preserves local neighbourhood information.
+- It can reveal complex patterns and groups.
+- It can be used for dimensionality reduction, not just for creating two-dimensional plots.
+
+**Limitations:**
+- Its results depend on parameters such as `n_neighbors` and `min_dist`.
+- Different settings may produce different visual patterns.
+- Distances between distant groups should be interpreted carefully.
+- The resulting plot may not represent every relationship in the original data accurately.
+
+UMAP is useful when we want to explore large datasets and need a nonlinear visualization method that is often computationally efficient.
+
+## 5. Comparing PCA, t-SNE, and UMAP
+
+All three methods reduce the dimensionality of data, but each is designed to do something a little different.
+
+| Comparison | PCA | t-SNE | UMAP |
+|---|---|---|---|
+| Type | Linear | Nonlinear | Nonlinear |
+| Main focus | Capturing maximum variance | Preserving local similarities | Preserving neighbourhood structure |
+| Speed | Usually fast | Usually slower | Often faster than t-SNE |
+| Cluster visualization | Depends on the data | Very useful | Very useful |
+| Important parameters | Number of components | Perplexity | n_neighbors, min_dist |
+| Interpretability | Relatively easy | Difficult | Difficult |
+| Common use | Feature reduction | Exploring clusters | Exploring large datasets |
+
+As the comparison shows, there’s no single method that works best in every situation.
+
+PCA is a good choice when you want to reduce the number of features while retaining as much variance as possible. t-SNE is often more useful when you’re exploring local groups in complex data. UMAP offers another nonlinear option and is often preferred when speed and scalability matter.
+
+## 6. Important Considerations When Using These Techniques
+
+It’s important to understand how a dimensionality reduction method works before drawing conclusions from its results.
+
+For instance, t-SNE can make clusters look far apart even when they aren’t very far apart in the original high-dimensional space. Likewise, the apparent size or spread of a cluster in a t-SNE plot shouldn’t automatically be taken as a reflection of its size or spread in the original data.
+
+UMAP can also alter some global relationships while preserving local neighbourhoods. So, even a visually appealing plot may not represent every relationship accurately.
+
+Preparing the data matters, too. Handle missing values before applying these methods, and consider standardizing features when they use different scales. It’s also worth testing different parameter settings and comparing the visualizations they produce.
+
+These methods are best used as tools for exploring data rather than as final proof of a particular pattern or relationship.
+
+## 7. Conclusion
+
+PCA, t-SNE, and UMAP each offer a different way to make high-dimensional datasets easier to understand, with their own advantages and trade-offs.
+
+PCA is often a useful first step: it’s relatively straightforward, runs quickly, and preserves as much of the data’s variance as possible. t-SNE can help reveal local patterns and clusters in more complex data, while UMAP provides another nonlinear approach that is often faster and well suited to larger datasets.
+
+The best method depends on the data and what you’re hoping to learn from it. Sometimes, comparing visualizations from multiple techniques gives a fuller picture than relying on just one.
+
+Ultimately, dimensionality reduction can make complex data easier to explore, but its results should be interpreted with care. Lowering the number of dimensions can also mean losing or distorting some information.
+## 8. References
+
+[1] I. T. Jolliffe and J. Cadima, "Principal component analysis: A review and recent developments," *Philosophical Transactions of the Royal Society A: Mathematical, Physical and Engineering Sciences*, vol. 374, no. 2065, Art. no. 20150202, 2016, doi: 10.1098/rsta.2015.0202.
+
+[2] L. van der Maaten and G. Hinton, "Visualizing data using t-SNE," *Journal of Machine Learning Research*, vol. 9, pp. 2579–2605, 2008.
+
+[3] L. McInnes, J. Healy, N. Saul, and L. Großberger, "UMAP: Uniform Manifold Approximation and Projection," *Journal of Open Source Software*, vol. 3, no. 29, p. 861, 2018, doi: 10.21105/joss.00861.
+
+[4] M. Wattenberg, F. Viégas, and I. Johnson, "How to Use t-SNE Effectively," *Distill*, 2016, doi: 10.23915/distill.00002.
